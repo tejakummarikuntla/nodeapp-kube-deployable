@@ -1,0 +1,15 @@
+inputSet:
+  name: test_input_set
+  identifier: test_input_set
+  orgIdentifier: default
+  projectIdentifier: Product_Exploratory
+  pipeline:
+    identifier: Repo_SBOM_for_Nodeapp
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
+  object Object: pipeline.properties.ci.codebase
