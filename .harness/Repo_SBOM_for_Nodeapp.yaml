@@ -1,0 +1,52 @@
+pipeline:
+  name: Repo SBOM for Nodeapp
+  identifier: Repo_SBOM_for_Nodeapp
+  projectIdentifier: Product_Exploratory
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.tejakummarikuntla
+        repoName: nodeapp-kube-deployable
+        build: <+input>
+  stages:
+    - stage:
+        name: Build
+        identifier: Build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: SscaOrchestration
+                  name: SscaOrchestration_1
+                  identifier: SscaOrchestration_1
+                  spec:
+                    mode: generation
+                    tool:
+                      type: Syft
+                      spec:
+                        format: spdx-json
+                    source:
+                      type: repository
+                      spec:
+                        url: https://github.com/tejakummarikuntla/nodeapp-kube-deployable
+                        variant_type: branch
+                        variant: <+trigger.sourceBranch>
+                    sbom_drift:
+                      base: repository
+                      spec:
+                        variant: main
+                    resources:
+                      limits:
+                        memory: 500Mi
+                        cpu: "0.5"
